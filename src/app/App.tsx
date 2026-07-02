@@ -860,7 +860,7 @@ function Contact() {
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.08] tracking-tight"
               style={{ fontFamily: "var(--font-serif-stack)" }}
             >
-              {"Let's build experiences people enjoy using."}
+              {"Contact me: "}
             </h2>
           </FadeIn>
         </div>
