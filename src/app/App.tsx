@@ -608,7 +608,7 @@ function About() {
               </p>
               <p>
                 {
-                  "Whether I'm shaping a component library or implementing an accessible user journey, the goal is the same: products that work beautifully for <b> real people with real needs."
+                  "Whether I'm shaping a component library or implementing an accessible user journey, the goal is the same: products that work beautifully for real people with real needs."
                 }
               </p>
             </div>
