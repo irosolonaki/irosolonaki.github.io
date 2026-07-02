@@ -870,7 +870,7 @@ function Contact() {
           <FadeIn delay={0.15}>
             <div className="space-y-0">
               <a
-                href="mailto:iro.solonaki@gmail.com"
+                href="mailto:irosolonaki@gmail.com"
                 className="flex items-center gap-4 py-5 border-b border-border hover:border-foreground group transition-colors duration-200"
               >
                 <Mail
@@ -878,7 +878,7 @@ function Contact() {
                   className="text-muted-foreground group-hover:text-accent transition-colors duration-200 flex-shrink-0"
                 />
                 <span className="text-sm font-medium">
-                  iro.solonaki@gmail.com
+                  irosolonaki@gmail.com
                 </span>
                 <ChevronRight
                   size={13}
@@ -886,7 +886,7 @@ function Contact() {
                 />
               </a>
               <a
-                href="https://linkedin.com/in/irosolonaki"
+                href="https://www.linkedin.com/in/iro-solonaki-248953254/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 py-5 border-b border-border hover:border-foreground group transition-colors duration-200"
