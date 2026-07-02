@@ -10,6 +10,8 @@ import {
   X,
   Gamepad2,
   ChevronRight,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -91,17 +93,17 @@ const PROJECTS = [
     tags: ["Unity3D", "C#"],
     badge: "Bachelor Thesis",
     description:
-      "A story-driven 3D game exploring narrative design, gameplay systems, and immersive player experiences built as my final thesis.",
+      "An atmospheric, narrative-driven 3D video game that combines exploration, puzzle-solving, and storytelling through environmental elements.",
     type: "game",
   },
   {
     id: 2,
     title: "FLUX",
-    subtitle: "2D Story Platformer",
+    subtitle: "2D Story Side-Scroller",
     tags: ["Unity", "C#"],
     badge: null,
     description:
-      "Narrative side-scrolling platformer focusing on level design, environmental storytelling, and layered gameplay mechanics.",
+      "A 2D side-scrolling game developed in Unity (C#) featuring dark pixel-art visuals, puzzle-solving, and symbolic combat.",
     type: "game",
   },
   {
@@ -111,13 +113,13 @@ const PROJECTS = [
     tags: ["Unity", "C#"],
     badge: null,
     description:
-      "A polished platformer built to explore precise movement mechanics, responsive controls, and player interaction design.",
+      "A 2D polished platformer built to explore precise movement mechanics, responsive controls, and player interaction design.",
     type: "game",
   },
   {
     id: 4,
     title: "Ambulance Response App",
-    subtitle: "UI/UX Case Study",
+    subtitle: "UI/UX Case Study & Prototype",
     tags: ["Figma", "UX Research", "Prototyping"],
     badge: "Winner — Vodafone Campus Lab",
     description:
@@ -127,11 +129,11 @@ const PROJECTS = [
   {
     id: 5,
     title: "Earthquake Crisis App",
-    subtitle: "Crisis Management",
+    subtitle: "High Fidelity Prototype",
     tags: ["Figma", "UX", "Rapid Prototyping"],
     badge: "3rd Place — GR/TR Hackathon",
     description:
-      "Collaborative crisis management application focused on usability under extreme stress, built in a 48-hour hackathon.",
+      "Collaborative crisis management application prototype, focused on usability, built in a 48-hour hackathon.",
     type: "design",
   },
   {
@@ -314,11 +316,15 @@ function Nav({
   activeSection,
   mobileOpen,
   setMobileOpen,
+  darkMode,
+  setDarkMode,
 }: {
   scrollProgress: number;
   activeSection: string;
   mobileOpen: boolean;
   setMobileOpen: (v: boolean) => void;
+  darkMode: boolean;
+  setDarkMode: (v: boolean) => void;
 }) {
   const [scrolled, setScrolled] = useState(false);
 
@@ -353,7 +359,7 @@ function Nav({
               style={{ fontFamily: "var(--font-serif-stack)" }}
               className="text-lg tracking-tight"
             >
-              Iro Solonaki
+              irosolonaki
             </span>
             {/* Pixel dot accent */}
             <div className="w-[5px] h-[5px] bg-accent group-hover:scale-110 transition-transform" />
@@ -374,15 +380,31 @@ function Nav({
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              aria-label="Toggle dark mode"
+              className="p-1.5 rounded-full hover:bg-secondary transition-colors cursor-pointer"
+            >
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
           </div>
 
           {/* Mobile toggle */}
-          <button
-            className="md:hidden p-1 cursor-pointer"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              aria-label="Toggle dark mode"
+              className="p-1.5 rounded-full hover:bg-secondary transition-colors cursor-pointer"
+            >
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button
+              className="p-1 cursor-pointer"
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -444,8 +466,6 @@ function Hero({
             >
               Designing thoughtful{" "}
               <span className="italic text-accent">experiences.</span>
-              <br />
-              Building scalable products.
             </h1>
           </FadeIn>
 
@@ -467,7 +487,7 @@ function Hero({
           <FadeIn delay={0.24}>
             <p className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed mb-10">
               {
-                "I'm Iro, a UI/UX Designer turned Front-end Developer currently at Vodafone. I transform research and ideas into intuitive digital experiences and bring them to life through clean, scalable code. My work lives at the intersection of design systems, usability, and modern web engineering."
+                "I'm Iro, a UI/UX Designer turned Front-end Developer. I enjoy turning ideas into digital experiences that are simple, thoughtful, and enjoyable to use. I'm also passionate about video games and love exploring how game design can inspire better UI/UX and front-end experiences."
               }
             </p>
           </FadeIn>
@@ -588,7 +608,7 @@ function About() {
               </p>
               <p>
                 {
-                  "Whether I'm shaping a component library or implementing an accessible e-commerce flow, the goal is the same: products that work beautifully for real people at real scale."
+                  "Whether I'm shaping a component library or implementing an accessible user journey, the goal is the same: products that work beautifully for <b> real people with real needs."
                 }
               </p>
             </div>
@@ -946,6 +966,17 @@ export default function App() {
   const [cursorVisible, setCursorVisible] = useState(false);
   const [konamiShown, setKonamiShown] = useState(false);
   const konamiRef = useRef<string[]>([]);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const stored = localStorage.getItem("theme");
+    if (stored) return stored === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   useEffect(() => {
     // Scroll progress
@@ -1028,6 +1059,8 @@ export default function App() {
         activeSection={activeSection}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       />
 
       <main>
