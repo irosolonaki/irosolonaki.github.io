@@ -1,20 +1,25 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
-import {
-  MapPin,
-  Mail,
-  Linkedin,
-  ArrowDown,
-  Menu,
-  X,
-  Gamepad2,
-  ChevronRight,
-  Sun,
-  Moon,
-} from "lucide-react";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+import {
+  EDUCATION,
+  EXPERIENCES,
+  NAV_LINKS,
+  SKILL_GROUPS,
+} from "./data";
+import {
+  ChevronRightIcon,
+  CloseIcon,
+  GamepadIcon,
+  LinkedinIcon,
+  MailIcon,
+  MapPinIcon,
+  MenuIcon,
+  MoonIcon,
+  SunIcon,
+} from "./components/Icons";
+import { Projects } from "./components/Projects";
 
 const KONAMI_SEQUENCE = [
   "ArrowUp",
@@ -29,193 +34,9 @@ const KONAMI_SEQUENCE = [
   "a",
 ];
 
-const NAV_LINKS = [
-  { label: "About", id: "about" },
-  { label: "Experience", id: "experience" },
-  { label: "Projects", id: "projects" },
-  { label: "Skills", id: "skills" },
-  { label: "Contact", id: "contact" },
-];
-
-const EXPERIENCES = [
-  {
-    id: 1,
-    company: "Vodafone",
-    role: "Front-end Developer",
-    type: "Graduate Trainee",
-    period: ["March 2026", "Present"],
-    badge: "Current",
-    responsibilities: [
-      "Maintain and optimize Vodafone's eShop experience at enterprise scale",
-      "Develop and ship production-ready front-end features within the E-commerce team",
-      "Improve performance and user experience for millions of users",
-      "Collaborate closely with designers, developers, and product stakeholders",
-      "Ensure design consistency while implementing scalable, maintainable solutions",
-    ],
-  },
-  {
-    id: 2,
-    company: "Vodafone",
-    role: "UI/UX Designer",
-    type: "Graduate Trainee",
-    period: ["March 2025", "March 2026"],
-    badge: null,
-    responsibilities: [
-      "Designed high-fidelity prototypes and reusable component libraries in Figma",
-      "Built scalable design components using Variables and Design Tokens",
-      "Supported and evolved Vodafone's Design System across product teams",
-      "Conducted user testing sessions and translated feedback into product improvements",
-      "Designed responsive, accessible experiences across web and mobile platforms",
-      "Collaborated with product owners, engineering leads, and cross-functional teams",
-    ],
-  },
-  {
-    id: 3,
-    company: "Vodafone",
-    role: "UI/UX Intern",
-    type: "Intern",
-    period: ["September 2024", "December 2024"],
-    badge: null,
-    responsibilities: [
-      "Supported UI/UX design projects across the product design organization",
-      "Produced wireframes and high-fidelity mockups under senior guidance",
-      "Learned enterprise-scale design workflows and collaboration processes",
-      "Contributed ideas to internal product concepts and design sprints",
-    ],
-  },
-];
-
-const PROJECTS = [
-  {
-    id: 1,
-    title: "Echoes of Time",
-    subtitle: "3D Narrative Game",
-    tags: ["Unity3D", "C#"],
-    badge: "Bachelor Thesis",
-    description:
-      "An atmospheric, narrative-driven 3D video game that combines exploration, puzzle-solving, and storytelling through environmental elements.",
-    type: "game",
-  },
-  {
-    id: 2,
-    title: "FLUX",
-    subtitle: "2D Story Side-Scroller",
-    tags: ["Unity", "C#"],
-    badge: null,
-    description:
-      "A 2D side-scrolling game developed in Unity (C#) featuring dark pixel-art visuals, puzzle-solving, and symbolic combat.",
-    type: "game",
-  },
-  {
-    id: 3,
-    title: "Madeline",
-    subtitle: "2D Platformer",
-    tags: ["Unity", "C#"],
-    badge: null,
-    description:
-      "A 2D polished platformer built to explore precise movement mechanics, responsive controls, and player interaction design.",
-    type: "game",
-  },
-  {
-    id: 4,
-    title: "Ambulance Response App",
-    subtitle: "UI/UX Case Study & Prototype",
-    tags: ["Figma", "UX Research", "Prototyping"],
-    badge: "Winner — Vodafone Campus Lab",
-    description:
-      "Designed a complete emergency response application with user-centered workflows, accessibility considerations, and high-fidelity prototypes.",
-    type: "design",
-  },
-  {
-    id: 5,
-    title: "Earthquake Crisis App",
-    subtitle: "High Fidelity Prototype",
-    tags: ["Figma", "UX", "Rapid Prototyping"],
-    badge: "3rd Place — GR/TR Hackathon",
-    description:
-      "Collaborative crisis management application prototype, focused on usability, built in a 48-hour hackathon.",
-    type: "design",
-  },
-  {
-    id: 6,
-    title: "Study Tracker",
-    subtitle: "Productivity Web App",
-    tags: ["React", ".NET Core"],
-    badge: null,
-    description:
-      "Web application for tracking study progress, managing learning goals, and visualizing progress over time.",
-    type: "dev",
-  },
-  {
-    id: 7,
-    title: "Learning Platform for Java",
-    subtitle: "Educational Platform",
-    tags: ["React", ".NET Core"],
-    badge: null,
-    description:
-      "Interactive educational platform designed to improve programming education through structured, engaging learning paths.",
-    type: "dev",
-  },
-];
-
-const SKILL_GROUPS = [
-  {
-    label: "Design",
-    skills: [
-      "Figma",
-      "Design Systems",
-      "UI Design",
-      "UX Design",
-      "User Testing",
-      "Wireframing",
-      "High Fidelity Prototyping",
-      "Components",
-      "Variables",
-      "Photoshop",
-      "Illustrator",
-    ],
-  },
-  {
-    label: "Development",
-    skills: [
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Next.js",
-      "HTML",
-      "CSS",
-      "C#",
-      "GitHub",
-    ],
-  },
-  {
-    label: "Game Development",
-    skills: ["Unity", "C#", "Narrative Design"],
-  },
-];
-
-const EDUCATION = [
-  {
-    school: "University of Piraeus",
-    degree: "BSc in Computer Science",
-    period: "2020 – 2024",
-    grade: "CGPA: 8.53 / 10",
-  },
-  {
-    school: "Deree – The American College of Greece",
-    degree: "Minor in Gaming Technologies",
-    period: "2022 – 2024",
-    grade: "GPA: 4.0",
-  },
-];
-
-// ─── Utilities ────────────────────────────────────────────────────────────────
-
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
-
-// ─── Small components ─────────────────────────────────────────────────────────
 
 function FadeIn({
   children,
@@ -228,10 +49,10 @@ function FadeIn({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 18, scale: 0.985 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.2, margin: "-40px" }}
+      transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -239,7 +60,6 @@ function FadeIn({
   );
 }
 
-// Space Invader pixel sprite — subtle gaming nod
 function PixelInvader({ className = "" }: { className?: string }) {
   const rows = [
     [0, 0, 1, 0, 0, 1, 0, 0],
@@ -251,6 +71,7 @@ function PixelInvader({ className = "" }: { className?: string }) {
     [1, 0, 1, 0, 0, 1, 0, 1],
     [0, 1, 0, 0, 0, 0, 1, 0],
   ];
+
   return (
     <div className={`inline-flex flex-col gap-[2px] ${className}`}>
       {rows.map((row, ri) => (
@@ -267,7 +88,6 @@ function PixelInvader({ className = "" }: { className?: string }) {
   );
 }
 
-// Square pixel cursor (shown on CTA hover)
 function PixelCursor({
   x,
   y,
@@ -309,17 +129,13 @@ function SectionLabel({ children }: { children: ReactNode }) {
   );
 }
 
-// ─── Nav ──────────────────────────────────────────────────────────────────────
-
 function Nav({
-  scrollProgress,
   activeSection,
   mobileOpen,
   setMobileOpen,
   darkMode,
   setDarkMode,
 }: {
-  scrollProgress: number;
   activeSection: string;
   mobileOpen: boolean;
   setMobileOpen: (v: boolean) => void;
@@ -336,12 +152,6 @@ function Nav({
 
   return (
     <>
-      {/* Scroll progress bar */}
-      <div
-        className="fixed top-0 left-0 z-[100] h-[2px] bg-accent transition-all duration-75"
-        style={{ width: `${scrollProgress * 100}%` }}
-      />
-
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
@@ -350,7 +160,6 @@ function Nav({
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
-          {/* Logo */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="flex items-center gap-2 group cursor-pointer"
@@ -361,11 +170,9 @@ function Nav({
             >
               irosolonaki
             </span>
-            {/* Pixel dot accent */}
             <div className="w-[5px] h-[5px] bg-accent group-hover:scale-110 transition-transform" />
           </button>
 
-          {/* Desktop links */}
           <div className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
               <button
@@ -385,30 +192,40 @@ function Nav({
               aria-label="Toggle dark mode"
               className="p-1.5 rounded-full hover:bg-secondary transition-colors cursor-pointer"
             >
-              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+              {darkMode ? (
+                <SunIcon className="w-4 h-4" />
+              ) : (
+                <MoonIcon className="w-4 h-4" />
+              )}
             </button>
           </div>
 
-          {/* Mobile toggle */}
           <div className="md:hidden flex items-center gap-2">
             <button
               onClick={() => setDarkMode(!darkMode)}
               aria-label="Toggle dark mode"
               className="p-1.5 rounded-full hover:bg-secondary transition-colors cursor-pointer"
             >
-              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+              {darkMode ? (
+                <SunIcon className="w-4 h-4" />
+              ) : (
+                <MoonIcon className="w-4 h-4" />
+              )}
             </button>
             <button
               className="p-1 cursor-pointer"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+              {mobileOpen ? (
+                <CloseIcon className="w-[18px] h-[18px]" />
+              ) : (
+                <MenuIcon className="w-[18px] h-[18px]" />
+              )}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-background pt-16 flex flex-col">
           <div className="flex flex-col px-6 py-4">
@@ -432,8 +249,6 @@ function Nav({
   );
 }
 
-// ─── Hero ─────────────────────────────────────────────────────────────────────
-
 function Hero({
   onCursorEnter,
   onCursorLeave,
@@ -448,7 +263,6 @@ function Hero({
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-end">
         <div className="lg:col-span-8">
-          {/* Eyebrow */}
           <FadeIn>
             <div className="flex items-center gap-3 mb-10">
               <div className="w-6 h-px bg-accent" />
@@ -458,18 +272,16 @@ function Hero({
             </div>
           </FadeIn>
 
-          {/* Heading */}
           <FadeIn delay={0.08}>
             <h1
               className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.04] tracking-tight mb-8"
               style={{ fontFamily: "var(--font-serif-stack)" }}
             >
               Designing thoughtful{" "}
-              <span className="italic text-accent">experiences.</span>
+              <span className="text-accent">experiences.</span>
             </h1>
           </FadeIn>
 
-          {/* Role tags */}
           <FadeIn delay={0.16}>
             <div className="flex flex-wrap gap-2 mb-8">
               {["UI/UX Designer", "Front-end Developer"].map((tag) => (
@@ -483,16 +295,16 @@ function Hero({
             </div>
           </FadeIn>
 
-          {/* Intro */}
           <FadeIn delay={0.24}>
             <p className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed mb-10">
-              {
-                "I'm Iro, a UI/UX Designer turned Front-end Developer. I enjoy turning ideas into digital experiences that are simple, thoughtful, and enjoyable to use. I'm also passionate about video games and love exploring how game design can inspire better UI/UX and front-end experiences."
-              }
+              I&apos;m Iro, a UI/UX Designer turned Front-end Developer. I enjoy
+              turning ideas into digital experiences that are simple,
+              thoughtful, and enjoyable to use. I&apos;m also passionate about
+              video games and love exploring how game design can inspire better
+              UI/UX and front-end experiences.
             </p>
           </FadeIn>
 
-          {/* CTAs */}
           <FadeIn delay={0.32}>
             <div className="flex flex-wrap gap-3">
               <button
@@ -523,7 +335,6 @@ function Hero({
           </FadeIn>
         </div>
 
-        {/* Decorative column */}
         <div className="hidden lg:flex lg:col-span-4 flex-col items-end justify-end gap-8 pb-2">
           <FadeIn delay={0.4}>
             <PixelInvader className="opacity-25" />
@@ -541,25 +352,9 @@ function Hero({
           </FadeIn>
         </div>
       </div>
-
-      {/* Scroll nudge */}
-      <FadeIn delay={0.6}>
-        <button
-          onClick={() => scrollTo("about")}
-          className="mt-20 flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors group cursor-pointer"
-        >
-          <span className="text-[11px] tracking-[0.2em] uppercase">Scroll</span>
-          <ArrowDown
-            size={13}
-            className="group-hover:translate-y-1 transition-transform duration-200"
-          />
-        </button>
-      </FadeIn>
     </section>
   );
 }
-
-// ─── About ────────────────────────────────────────────────────────────────────
 
 function About() {
   const interests = [
@@ -580,16 +375,15 @@ function About() {
       <SectionLabel>About</SectionLabel>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-        {/* Main narrative */}
         <div className="lg:col-span-7 space-y-6">
           <FadeIn>
             <p
               className="text-2xl md:text-3xl leading-[1.4] tracking-tight"
               style={{ fontFamily: "var(--font-serif-stack)" }}
             >
-              {
-                "I started in Computer Science, discovered a love for how things look and feel, and haven't stopped bridging both worlds since."
-              }
+              I started in Computer Science, discovered a love for how things
+              look and feel, and haven&apos;t stopped bridging both worlds
+              since.
             </p>
           </FadeIn>
           <FadeIn delay={0.1}>
@@ -607,19 +401,17 @@ function About() {
                 the want to bring prototypes to life.
               </p>
               <p>
-                {
-                  "Whether I'm shaping a component library or implementing an accessible user journey, the goal is the same: products that work beautifully for real people with real needs."
-                }
+                Whether I&apos;m shaping a component library or implementing an
+                accessible user journey, the goal is the same: products that
+                work beautifully for real people with real needs.
               </p>
             </div>
           </FadeIn>
         </div>
 
-        {/* Side panel */}
         <div className="lg:col-span-5">
           <FadeIn delay={0.15}>
             <div className="space-y-8">
-              {/* Interests */}
               <div>
                 <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground font-medium mb-3">
                   Interests
@@ -638,7 +430,6 @@ function About() {
 
               <div className="h-px bg-border" />
 
-              {/* Quick facts */}
               <div className="space-y-5">
                 <div>
                   <p className="text-[11px] tracking-[0.2em] uppercase text-muted-foreground font-medium mb-1.5">
@@ -665,7 +456,6 @@ function About() {
                 </div>
               </div>
 
-              {/* Pixel decoration */}
               <div className="flex justify-end">
                 <PixelInvader className="opacity-15" />
               </div>
@@ -676,8 +466,6 @@ function About() {
     </section>
   );
 }
-
-// ─── Experience ───────────────────────────────────────────────────────────────
 
 function Experience() {
   return (
@@ -691,7 +479,6 @@ function Experience() {
         {EXPERIENCES.map((exp, i) => (
           <FadeIn key={exp.id} delay={i * 0.08}>
             <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-6 md:gap-10">
-              {/* Period column */}
               <div className="md:pt-1 flex md:flex-col gap-1.5 md:gap-1">
                 {exp.period.map((p, pi) => (
                   <span
@@ -703,9 +490,7 @@ function Experience() {
                 ))}
               </div>
 
-              {/* Content column */}
               <div className="relative pl-6 md:pl-8 border-l border-border">
-                {/* Square pixel dot on timeline */}
                 <div className="absolute -left-[5px] top-[5px] w-[9px] h-[9px] border-2 border-accent bg-background" />
 
                 {exp.badge && (
@@ -730,7 +515,6 @@ function Experience() {
                       key={ri}
                       className="flex gap-3 text-[14px] text-muted-foreground leading-relaxed"
                     >
-                      {/* Pixel bullet */}
                       <span className="mt-[7px] w-[4px] h-[4px] bg-muted-foreground flex-shrink-0" />
                       <span>{r}</span>
                     </li>
@@ -744,57 +528,6 @@ function Experience() {
     </section>
   );
 }
-
-// ─── Projects ─────────────────────────────────────────────────────────────────
-
-function Projects() {
-  return (
-    <section
-      id="projects"
-      className="py-24 md:py-32 px-6 md:px-10 max-w-6xl mx-auto"
-    >
-      <SectionLabel>Projects</SectionLabel>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {PROJECTS.map((project, i) => (
-          <FadeIn key={project.id} delay={i * 0.04} className="h-full">
-            <div className="p-7 h-full flex flex-col border border-border hover:bg-muted transition-colors duration-200 group">
-              <p className="text-[11px] tracking-[0.14em] uppercase text-muted-foreground mb-2 font-medium">
-                {project.subtitle}
-              </p>
-              <h3
-                className="text-2xl mb-3 leading-tight tracking-tight min-h-[4rem]"
-                style={{ fontFamily: "var(--font-serif-stack)" }}
-              >
-                {project.title}
-              </h3>
-              <p className="text-[13px] text-muted-foreground leading-relaxed flex-1 mb-5">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-1.5 mt-auto">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[11px] px-2.5 py-1 bg-secondary text-muted-foreground font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {project.badge && (
-                  <span className="text-[10px] tracking-[0.14em] uppercase px-2.5 py-1 border border-accent text-accent font-medium">
-                    {project.badge}
-                  </span>
-                )}
-              </div>
-            </div>
-          </FadeIn>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-// ─── Skills ───────────────────────────────────────────────────────────────────
 
 function Skills() {
   return (
@@ -829,8 +562,6 @@ function Skills() {
   );
 }
 
-// ─── Education ────────────────────────────────────────────────────────────────
-
 function Education() {
   return (
     <section
@@ -862,8 +593,6 @@ function Education() {
   );
 }
 
-// ─── Contact ──────────────────────────────────────────────────────────────────
-
 function Contact() {
   return (
     <section
@@ -873,19 +602,17 @@ function Contact() {
       <SectionLabel>Contact</SectionLabel>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
-        {/* Closing statement */}
         <div className="lg:col-span-7">
           <FadeIn>
             <h2
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.08] tracking-tight"
               style={{ fontFamily: "var(--font-serif-stack)" }}
             >
-              {"Contact me: "}
+              Contact me:
             </h2>
           </FadeIn>
         </div>
 
-        {/* Contact details */}
         <div className="lg:col-span-5">
           <FadeIn delay={0.15}>
             <div className="space-y-0">
@@ -893,17 +620,11 @@ function Contact() {
                 href="mailto:irosolonaki@gmail.com"
                 className="flex items-center gap-4 py-5 border-b border-border hover:border-foreground group transition-colors duration-200"
               >
-                <Mail
-                  size={15}
-                  className="text-muted-foreground group-hover:text-accent transition-colors duration-200 flex-shrink-0"
-                />
+                <MailIcon className="w-[15px] h-[15px] text-muted-foreground group-hover:text-accent transition-colors duration-200 flex-shrink-0" />
                 <span className="text-sm font-medium">
                   irosolonaki@gmail.com
                 </span>
-                <ChevronRight
-                  size={13}
-                  className="ml-auto text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all duration-200"
-                />
+                <ChevronRightIcon className="ml-auto w-[13px] h-[13px] text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all duration-200" />
               </a>
               <a
                 href="https://www.linkedin.com/in/iro-solonaki-248953254/"
@@ -911,23 +632,14 @@ function Contact() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 py-5 border-b border-border hover:border-foreground group transition-colors duration-200"
               >
-                <Linkedin
-                  size={15}
-                  className="text-muted-foreground group-hover:text-accent transition-colors duration-200 flex-shrink-0"
-                />
+                <LinkedinIcon className="w-[15px] h-[15px] text-muted-foreground group-hover:text-accent transition-colors duration-200 flex-shrink-0" />
                 <span className="text-sm font-medium">
                   linkedin.com/in/irosolonaki
                 </span>
-                <ChevronRight
-                  size={13}
-                  className="ml-auto text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all duration-200"
-                />
+                <ChevronRightIcon className="ml-auto w-[13px] h-[13px] text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all duration-200" />
               </a>
               <div className="flex items-center gap-4 py-5 border-b border-border">
-                <MapPin
-                  size={15}
-                  className="text-muted-foreground flex-shrink-0"
-                />
+                <MapPinIcon className="w-[15px] h-[15px] text-muted-foreground flex-shrink-0" />
                 <span className="text-sm font-medium">Athens, Greece</span>
               </div>
             </div>
@@ -937,8 +649,6 @@ function Contact() {
     </section>
   );
 }
-
-// ─── Footer ───────────────────────────────────────────────────────────────────
 
 function Footer() {
   return (
@@ -956,12 +666,10 @@ function Footer() {
   );
 }
 
-// ─── App ──────────────────────────────────────────────────────────────────────
-
 export default function App() {
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
   const [konamiShown, setKonamiShown] = useState(false);
@@ -973,21 +681,14 @@ export default function App() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
+  const handleProjectSelect = (projectId: string) => setSelectedProject(projectId);
+
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
   useEffect(() => {
-    // Scroll progress
-    const onScroll = () => {
-      const el = document.documentElement;
-      const max = el.scrollHeight - el.clientHeight;
-      setScrollProgress(max > 0 ? Math.min(1, el.scrollTop / max) : 0);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    // Active section via IntersectionObserver
     const sectionIds = [
       "hero",
       "about",
@@ -1005,18 +706,17 @@ export default function App() {
       },
       { rootMargin: "-35% 0px -35% 0px" },
     );
+
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
 
-    // Mouse tracking for pixel cursor
     const onMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
     };
     window.addEventListener("mousemove", onMouseMove);
 
-    // Konami code easter egg
     const onKeyDown = (e: KeyboardEvent) => {
       const next = [...konamiRef.current, e.key].slice(-10);
       konamiRef.current = next;
@@ -1028,7 +728,6 @@ export default function App() {
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("keydown", onKeyDown);
       observer.disconnect();
@@ -1037,25 +736,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* MARKER-MAKE-KIT-INVOKED */}
-      {/* MARKER-MAKE-KIT-DISCOVERY-READ */}
-      {/* MARKER-MAKE-KIT-TOKENS-READ */}
-      {/* MARKER-MAKE-KIT-FINAL-CHECK-READ */}
       <PixelCursor x={cursorPos.x} y={cursorPos.y} visible={cursorVisible} />
 
-      {/* Konami code easter egg */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: konamiShown ? 1 : 0, y: konamiShown ? 0 : 12 }}
         transition={{ duration: 0.3 }}
         className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[200] px-6 py-3.5 bg-foreground text-background text-sm font-medium flex items-center gap-3 pointer-events-none whitespace-nowrap"
       >
-        <Gamepad2 size={15} />
+        <GamepadIcon className="w-[15px] h-[15px]" />
         <span>↑↑↓↓←→←→BA — Achievement unlocked: gamer detected</span>
       </motion.div>
 
       <Nav
-        scrollProgress={scrollProgress}
         activeSection={activeSection}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
@@ -1073,7 +766,11 @@ export default function App() {
         <div className="border-t border-border" />
         <Experience />
         <div className="border-t border-border" />
-        <Projects />
+        <Projects
+          selectedProject={selectedProject}
+          onSelectProject={handleProjectSelect}
+          onClearSelection={() => setSelectedProject(null)}
+        />
         <div className="border-t border-border" />
         <Skills />
         <div className="border-t border-border" />
