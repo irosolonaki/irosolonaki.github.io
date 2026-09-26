@@ -6,7 +6,6 @@ export const NAV_LINKS = [
   { label: "Contact", id: "contact" },
 ];
 
-
 export const EXPERIENCES = [
   {
     id: 1,
@@ -291,7 +290,7 @@ export const EDUCATION = [
     school: "University of Piraeus",
     degree: "BSc in Computer Science",
     period: "2020 – 2024",
-    grade: "CGPA: 8.53 / 10",
+    grade: "CGPA: 8.62 / 10",
   },
   {
     school: "Deree – The American College of Greece",

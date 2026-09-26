@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
 
-import {
-  EDUCATION,
-  EXPERIENCES,
-  NAV_LINKS,
-  SKILL_GROUPS,
-} from "./data";
+import { EDUCATION, EXPERIENCES, NAV_LINKS, SKILL_GROUPS } from "./data";
 import {
   ChevronRightIcon,
   CloseIcon,
@@ -681,7 +676,8 @@ export default function App() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
-  const handleProjectSelect = (projectId: string) => setSelectedProject(projectId);
+  const handleProjectSelect = (projectId: string) =>
+    setSelectedProject(projectId);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);

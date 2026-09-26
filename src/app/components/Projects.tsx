@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
-import { mediaUrl, projectImages, madelineGallery, gameReportGalleries } from "../media";
+import {
+  mediaUrl,
+  projectImages,
+  madelineGallery,
+  gameReportGalleries,
+} from "../media";
 import { GAME_PROJECTS, UI_UX_PROJECTS } from "../data";
 
 function FadeIn({
@@ -85,7 +90,9 @@ export function Projects({
               <div className="space-y-5 text-[15px] leading-relaxed text-muted-foreground">
                 <p>{activeProject.detail.problem}</p>
                 <p>{activeProject.detail.solution}</p>
-                {activeProject.detail.impact && <p>{activeProject.detail.impact}</p>}
+                {activeProject.detail.impact && (
+                  <p>{activeProject.detail.impact}</p>
+                )}
               </div>
             </div>
           </FadeIn>
@@ -137,40 +144,53 @@ export function Projects({
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
             <FadeIn className="h-full">
               <article className="flex h-full flex-col border border-border bg-background p-6">
-                <p className="text-[11px] tracking-[0.14em] uppercase text-muted-foreground mb-4">Professional work</p>
-                <h4 className="text-2xl mb-4" style={{ fontFamily: "var(--font-serif-stack)" }}>Vodafone Design Work</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6">Selected professional work is available on request. Get in touch to discuss my experience and the work I can share.</p>
-                <a className="mt-auto inline-block text-sm underline underline-offset-4" href="mailto:irosolonaki@gmail.com?subject=Professional%20work%20request">Request work samples ↗</a>
+                <p className="text-[11px] tracking-[0.14em] uppercase text-muted-foreground mb-4">
+                  Professional work
+                </p>
+                <h4
+                  className="text-2xl mb-4"
+                  style={{ fontFamily: "var(--font-serif-stack)" }}
+                >
+                  Design Work
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                  Selected professional work is available on request. Get in
+                  touch to discuss my experience and the work I can share.
+                </p>
+                <a
+                  className="mt-auto inline-block text-sm underline underline-offset-4"
+                  href="mailto:irosolonaki@gmail.com?subject=Professional%20work%20request"
+                >
+                  Request work samples ↗
+                </a>
               </article>
             </FadeIn>
             {UI_UX_PROJECTS.map((project, i) => {
-
               return (
                 <FadeIn key={project.id} delay={i * 0.06} className="h-full">
                   <div
                     role="button"
                     tabIndex={0}
                     onClick={() => {
-
-                        onSelectProject(project.id);
+                      onSelectProject(project.id);
                     }}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
                         event.preventDefault();
 
-                          onSelectProject(project.id);
+                        onSelectProject(project.id);
                       }
                     }}
                     className="group relative flex h-full w-full flex-col border border-border bg-background text-left transition-transform duration-200 hover:-translate-y-0.5 cursor-pointer outline-none"
                   >
                     <div className={`bg-gradient-to-br ${project.palette}`}>
-                      <div
-                        className="flex h-full flex-col bg-background/95"
-                      >
+                      <div className="flex h-full flex-col bg-background/95">
                         <CardPreview id={project.id} title={project.title} />
                         <div className="flex-1 p-6">
                           <div className="mb-4 flex flex-col items-center gap-2 text-center">
-                            <span className="text-[11px] tracking-[0.14em] uppercase text-muted-foreground font-medium">{project.subtitle}</span>
+                            <span className="text-[11px] tracking-[0.14em] uppercase text-muted-foreground font-medium">
+                              {project.subtitle}
+                            </span>
                             {project.badge && (
                               <span className="whitespace-normal border border-accent px-2 py-1 text-[9px] tracking-[0.12em] uppercase text-accent font-medium">
                                 {project.badge}
@@ -216,8 +236,6 @@ export function Projects({
                         </div>
                       </div>
                     </div>
-
-
                   </div>
                 </FadeIn>
               );
@@ -321,43 +339,116 @@ export function Projects({
 function CardPreview({ id, title }: { id: string; title: string }) {
   const file = projectImages[id];
   if (!file) return null;
-  return <div className="relative border-b border-border bg-muted/30">
-    <img src={mediaUrl(file)} alt={`${title} — ${id === "earthquake" ? "prototype recording preview" : "project preview"}`} loading="lazy" className="w-full aspect-video object-contain" />
-    {id === "earthquake" && <span className="absolute bottom-3 right-3 bg-background px-3 py-1 text-xs">▶ View walkthrough</span>}
-  </div>;
+  return (
+    <div className="relative border-b border-border bg-muted/30">
+      <img
+        src={mediaUrl(file)}
+        alt={`${title} — ${id === "earthquake" ? "prototype recording preview" : "project preview"}`}
+        loading="lazy"
+        className="w-full aspect-video object-contain"
+      />
+      {id === "earthquake" && (
+        <span className="absolute bottom-3 right-3 bg-background px-3 py-1 text-xs">
+          ▶ View walkthrough
+        </span>
+      )}
+    </div>
+  );
 }
 
 function ProjectGallery({ id, title }: { id: string; title: string }) {
-  if (gameReportGalleries[id]) return <section aria-label={`${title} gameplay gallery`}>
-    <h4 className="text-2xl mb-5">Gameplay and story</h4>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {gameReportGalleries[id].map(item => <MediaFigure key={item.src} file={item.src} caption={item.caption} />)}
-    </div>
-  </section>;
-  if (id === "madeline") return <section aria-label="Madeline gameplay and interface gallery">
-    <h4 className="text-2xl mb-5">Gameplay and interface</h4>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {madelineGallery.map(item => <MediaFigure key={item.src} file={item.src} caption={item.caption} />)}
-    </div>
-  </section>;
-  if (id === "earthquake") return <section aria-label="ResQLink prototype walkthrough" className="border border-border p-4 md:p-6">
-    <h4 className="text-xl mb-4">Prototype walkthrough</h4>
-    <video controls playsInline preload="metadata" poster={mediaUrl("resqlink-poster.jpg")} className="w-full max-h-[75vh] bg-black" aria-label="ResQLink earthquake-reporting app prototype recording">
-      <source src={mediaUrl("resqlink.mp4")} type="video/mp4" />
-      Your browser cannot play this video. Download the recording below.
-    </video>
-    <p className="text-sm text-muted-foreground mt-4">Screen recording of the ResQLink earthquake-reporting prototype.</p>
-    <a href={mediaUrl("resqlink.mov")} download className="inline-block underline text-sm mt-3">Download original MOV</a>
-  </section>;
+  if (gameReportGalleries[id])
+    return (
+      <section aria-label={`${title} gameplay gallery`}>
+        <h4 className="text-2xl mb-5">Gameplay and story</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {gameReportGalleries[id].map((item) => (
+            <MediaFigure
+              key={item.src}
+              file={item.src}
+              caption={item.caption}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  if (id === "madeline")
+    return (
+      <section aria-label="Madeline gameplay and interface gallery">
+        <h4 className="text-2xl mb-5">Gameplay and interface</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {madelineGallery.map((item) => (
+            <MediaFigure
+              key={item.src}
+              file={item.src}
+              caption={item.caption}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  if (id === "earthquake")
+    return (
+      <section
+        aria-label="ResQLink prototype walkthrough"
+        className="border border-border p-4 md:p-6"
+      >
+        <h4 className="text-xl mb-4">Prototype walkthrough</h4>
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          poster={mediaUrl("resqlink-poster.jpg")}
+          className="w-full max-h-[75vh] bg-black"
+          aria-label="ResQLink earthquake-reporting app prototype recording"
+        >
+          <source src={mediaUrl("resqlink.mp4")} type="video/mp4" />
+          Your browser cannot play this video. Download the recording below.
+        </video>
+        <p className="text-sm text-muted-foreground mt-4">
+          Screen recording of the ResQLink earthquake-reporting prototype.
+        </p>
+        <a
+          href={mediaUrl("resqlink.mov")}
+          download
+          className="inline-block underline text-sm mt-3"
+        >
+          Download original MOV
+        </a>
+      </section>
+    );
   const file = projectImages[id];
-  return file ? <MediaFigure file={file} caption={`${title} — ${id === "myiasis" ? "emergency assistance and ambulance-tracking interface mockups" : "gameplay capture"}`} /> : null;
+  return file ? (
+    <MediaFigure
+      file={file}
+      caption={`${title} — ${id === "myiasis" ? "emergency assistance and ambulance-tracking interface mockups" : "gameplay capture"}`}
+    />
+  ) : null;
 }
 
 function MediaFigure({ file, caption }: { file: string; caption: string }) {
-  return <figure className="min-w-0 border border-border bg-muted/20 p-3 md:p-4">
-    <a href={mediaUrl(file)} target="_blank" rel="noopener noreferrer" aria-label={`Open full-size image: ${caption}`} className="block focus-visible:outline-2 focus-visible:outline-accent">
-      <img src={mediaUrl(file)} alt={caption} loading="lazy" className="w-full h-auto max-h-[85vh] object-contain" />
-    </a>
-    <figcaption className="text-sm text-muted-foreground mt-3 leading-relaxed">{caption} <span className="block text-xs mt-1">Open image to view full size ↗</span></figcaption>
-  </figure>;
+  return (
+    <figure className="min-w-0 border border-border bg-muted/20 p-3 md:p-4">
+      <a
+        href={mediaUrl(file)}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Open full-size image: ${caption}`}
+        className="block focus-visible:outline-2 focus-visible:outline-accent"
+      >
+        <img
+          src={mediaUrl(file)}
+          alt={caption}
+          loading="lazy"
+          className="w-full h-auto max-h-[85vh] object-contain"
+        />
+      </a>
+      <figcaption className="text-sm text-muted-foreground mt-3 leading-relaxed">
+        {caption}{" "}
+        <span className="block text-xs mt-1">
+          Open image to view full size ↗
+        </span>
+      </figcaption>
+    </figure>
+  );
 }
